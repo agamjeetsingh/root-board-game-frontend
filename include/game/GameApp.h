@@ -5,6 +5,8 @@
 #ifndef ROOT_BOARD_GAME_FRONTEND_GAMEAPP_H
 #define ROOT_BOARD_GAME_FRONTEND_GAMEAPP_H
 
+#include <iostream>
+
 #include "../events/EventBus.h"
 #include "../input/InputManager.h"
 #include "SFML/Graphics/Font.hpp"
@@ -39,6 +41,8 @@ private:
 
     EventBus event_bus;
 
+    InputManager input_manager;
+
     void pollEvents() {
         while (const std::optional<sf::Event> event = window.pollEvent()) {
             event->visit(overloaded{
@@ -46,12 +50,14 @@ private:
                     window.close();
                 },
                 [&](const sf::Event::KeyPressed& e) {
-                    InputManager::getInstance().keyPressed(e.code);
+                    input_manager.keyPressed(e.code);
                 },
                 [&](const sf::Event::KeyReleased& e) {
-                    InputManager::getInstance().keyReleased(e.code);
+                    input_manager.keyReleased(e.code);
                 },
-                [](auto&&) { /* Default handler for other events */ }
+                [](auto&& e) {
+                    /* Default handler for other events */
+                }
             });
         }
     }

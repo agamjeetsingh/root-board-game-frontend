@@ -21,16 +21,6 @@ namespace sf {
  */
 class InputManager {
 public:
-
-    /**
-      * @brief Gets the singleton instance of InputManager
-      * @return Reference to the single InputManager instance
-      */
-    static InputManager& getInstance() {
-        static InputManager instance;
-        return instance;
-    }
-
     /**
      * @brief Marks a key as pressed
      * @param key The keyboard key that was pressed

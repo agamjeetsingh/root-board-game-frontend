@@ -25,6 +25,8 @@ int main() {
 
     EventBus event_bus;
 
+    InputManager input_manager;
+
     while (window.isOpen()) {
         sf::Time deltaTime = clock.restart();
         float dt = std::min(deltaTime.asSeconds(), 0.033f);
@@ -34,11 +36,11 @@ int main() {
                 window.close();
 
             if (event->is<sf::Event::KeyPressed>()) {
-                InputManager::getInstance().keyPressed(event->getIf<sf::Event::KeyPressed>()->code);
+                input_manager.keyPressed(event->getIf<sf::Event::KeyPressed>()->code);
             }
 
             if (event->is<sf::Event::KeyReleased>()) {
-                InputManager::getInstance().keyReleased(event->getIf<sf::Event::KeyReleased>()->code);
+                input_manager.keyReleased(event->getIf<sf::Event::KeyReleased>()->code);
             }
         }
 
