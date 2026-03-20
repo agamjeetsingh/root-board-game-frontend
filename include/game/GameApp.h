@@ -55,6 +55,17 @@ private:
                 [&](const sf::Event::KeyReleased& e) {
                     input_manager.keyReleased(e.code);
                 },
+                [&](const sf::Event::MouseMoved& e) {
+                    input_manager.mouseMovedTo(e.position);
+                },
+                [&](const sf::Event::MouseButtonPressed& e) {
+                    input_manager.mouseMovedTo(e.position);
+                    input_manager.mouseButtonPressed(e.button);
+                },
+                [&](const sf::Event::MouseButtonReleased& e) {
+                    input_manager.mouseMovedTo(e.position);
+                    input_manager.mouseButtonReleased(e.button);
+                },
                 [](auto&& e) {
                     /* Default handler for other events */
                 }

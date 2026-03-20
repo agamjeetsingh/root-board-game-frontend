@@ -10,6 +10,8 @@
 #include <SFML/Window/Keyboard.hpp>
 #include <unordered_map>
 
+#include "SFML/Window/Mouse.hpp"
+
 namespace sf {
     class Time;
 }
@@ -53,9 +55,20 @@ public:
         return pressedKeys[key1].first < pressedKeys[key2].first;
     }
 
+    void mouseMovedTo(sf::Vector2i pos) { mousePosition = pos; }
+
+    void mouseButtonPressed(const sf::Mouse::Button button) { pressedMouseButtons.insert({button, {clock.getElapsedTime(), false}}); }
+
+    void mouseButtonReleased(const sf::Mouse::Button button) { pressedMouseButtons.erase(button); }
+
 private:
     // pressedKeys[key].second is true if and only if it has been used
     std::unordered_map<sf::Keyboard::Key, std::pair<sf::Time, bool>> pressedKeys;
+
+    std::unordered_map<sf::Mouse::Button, std::pair<sf::Time, bool>> pressedMouseButtons;
+
+    sf::Vector2i mousePosition;
+
     sf::Clock clock;
 };
 
