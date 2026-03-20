@@ -1,0 +1,72 @@
+//
+// Created by Agamjeet Singh on 19/03/2026.
+//
+
+#ifndef ROOT_BOARD_GAME_FRONTEND_INPUTMANAGER_H
+#define ROOT_BOARD_GAME_FRONTEND_INPUTMANAGER_H
+
+#include <cassert>
+#include <SFML/System.hpp>
+#include <SFML/Window/Keyboard.hpp>
+#include <unordered_map>
+
+namespace sf {
+    class Time;
+}
+
+/**
+ * brief Manages all inputs. Can be used to check whether a key is currently being pressed. A better alternative to
+ * SFML's \code sf::Keyboard::isKeyPressed\endcode since that requires macOS input monitoring permissions. Needs to be
+ * kept updated through \code main.cpp\endcode.
+ */
+class InputManager {
+public:
+
+    /**
+      * @brief Gets the singleton instance of InputManager
+      * @return Reference to the single InputManager instance
+      */
+    static InputManager& getInstance() {
+        static InputManager instance;
+        return instance;
+    }
+
+    /**
+     * @brief Marks a key as pressed
+     * @param key The keyboard key that was pressed
+     */
+    void keyPressed(const sf::Keyboard::Key key) { pressedKeys.insert({key, {clock.getElapsedTime(), false}}); }
+
+    /**
+     * @brief Marks a key as released
+     * @param key The keyboard key that was released
+     */
+    void keyReleased(const sf::Keyboard::Key key) { pressedKeys.erase(key); }
+
+    /**
+     * @brief Checks if a key is currently pressed
+     * @param key The keyboard key to check
+     * @return true if and only if the key is currently pressed
+     */
+    [[nodiscard]] bool isPressed(const sf::Keyboard::Key key) const { return pressedKeys.contains(key); }
+
+    bool tryToUseKey(const sf::Keyboard::Key key) {
+        if (!isPressed(key) || pressedKeys[key].second) {
+            return false;
+        }
+        pressedKeys[key].second = true;
+        return true;
+    }
+
+    bool wasPressedEarlierThan(sf::Keyboard::Key key1, sf::Keyboard::Key key2) {
+        assert(isPressed(key1) && isPressed(key2));
+        return pressedKeys[key1].first < pressedKeys[key2].first;
+    }
+
+private:
+    // pressedKeys[key].second is true if and only if it has been used
+    std::unordered_map<sf::Keyboard::Key, std::pair<sf::Time, bool>> pressedKeys;
+    sf::Clock clock;
+};
+
+#endif //ROOT_BOARD_GAME_FRONTEND_INPUTMANAGER_H
