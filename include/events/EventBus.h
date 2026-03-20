@@ -13,9 +13,25 @@
 #include "Event.h"
 #include <mutex>
 
-class Listener;
+#include "Listener.h"
 
-struct ListenerComparator;
+/**
+ * @brief Comparator for sorting listeners by priority.
+ *
+ * Used by std::multiset to maintain listeners in priority order within the EventBus.
+ * Lower priority values are executed first.
+ */
+struct ListenerComparator {
+    /**
+     * @brief Compare two listeners by their priority.
+     * @param listenerA First listener to compare.
+     * @param listenerB Second listener to compare.
+     * @return true if listenerA has lower priority than listenerB.
+     */
+    bool operator()(const Listener& listenerA, const Listener& listenerB) const {
+        return listenerA.priority < listenerB.priority;
+    }
+};
 
 /**
  * @brief A singleton event bus that provides communication between different systems.

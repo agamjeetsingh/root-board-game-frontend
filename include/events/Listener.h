@@ -10,9 +10,9 @@
 #include <utility>
 
 #include "Event.h"
-#include "EventBus.h"
 #include "ListenerPriority.h"
 
+class EventBus;
 /**
  * @brief A type-erased listener that can receive events of a specific type.
  *
@@ -44,6 +44,7 @@ public:
      * @tparam T The event type to listen for.
      * @tparam F The callback function type.
      * @param cb The callback function that will be invoked when the event is dispatched.
+     * @param event_bus The event bus to register the listener in
      * @param priority The priority of this listener (defaults to NORMAL).
      * @return A constructed Listener that has been registered with the EventBus.
      *
@@ -52,9 +53,17 @@ public:
     template<typename T, typename F>
     requires std::invocable<F, const T&> &&
              std::same_as<std::invoke_result_t<F, const T&>, void>
-    static Listener make_listener(F&& cb, ListenerPriority priority = ListenerPriority::NORMAL) {
-        return Listener(std::type_identity<T>{}, std::forward<F>(cb), priority);
+    static Listener make_listener(F&& cb, EventBus& event_bus, ListenerPriority priority = ListenerPriority::NORMAL) {
+        Listener listener(std::type_identity<T>{}, std::forward<F>(cb), priority);
+        listener.registerWith(event_bus);
+        return listener;
     }
+
+    /**
+     * @brief Register this listener with the given EventBus.
+     * @param event_bus The event bus to register with.
+     */
+    void registerWith(EventBus& event_bus) const;
 
     /** @brief The priority of this listener, determines execution order. */
     const ListenerPriority priority;
@@ -95,27 +104,8 @@ private:
             if (auto payload = e.getIf<T>()) {
                 fn(*payload);
             }
-        }) {
-        EventBus::getInstance().registerListener(*this);
-    }
+        }) {}
 };
 
-/**
- * @brief Comparator for sorting listeners by priority.
- *
- * Used by std::multiset to maintain listeners in priority order within the EventBus.
- * Lower priority values are executed first.
- */
-struct ListenerComparator {
-    /**
-     * @brief Compare two listeners by their priority.
-     * @param listenerA First listener to compare.
-     * @param listenerB Second listener to compare.
-     * @return true if listenerA has lower priority than listenerB.
-     */
-    bool operator()(const Listener& listenerA, const Listener& listenerB) const {
-        return listenerA.priority < listenerB.priority;
-    }
-};
 
 #endif //ROOT_BOARD_GAME_FRONTEND_LISTENER_H
