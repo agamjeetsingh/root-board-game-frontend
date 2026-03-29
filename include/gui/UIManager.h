@@ -13,7 +13,7 @@ class UIManager {
 public:
     explicit UIManager(EventBus& event_bus): clickListener(Listener::make_listener<sf::Event::MouseButtonPressed>([](const sf::Event::MouseButtonPressed& e) {
 
-    }, event_bus)), widget(std::make_unique<Widget>(event_bus, sf::Vector2f{0, 0}, sf::Vector2f{0, 0})) {}
+    }, event_bus)), widget(std::make_unique<Widget>(event_bus, std::make_unique<RectHitbox>(sf::Vector2f{0, 0}, sf::Vector2f{0, 0}))) {}
 
     void addChild(std::unique_ptr<Widget> child) const {
         widget->addChild(std::move(child));

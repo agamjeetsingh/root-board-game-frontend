@@ -40,7 +40,9 @@ add_executable(root_board_game_frontend main.cpp
         include/gui/Widget.h
         include/events/MousePosition.h
         include/gui/UIManager.h
-        include/gui/TextBox.h)
+        include/gui/TextBox.h
+        include/gui/hitbox/Hitbox.h
+        include/gui/hitbox/RectHitbox.h)
 
 target_link_libraries(root_board_game_frontend PRIVATE
         nlohmann_json::nlohmann_json

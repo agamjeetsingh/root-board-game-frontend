@@ -9,6 +9,7 @@
 #include <ranges>
 #include <vector>
 #include "../events/Listener.h"
+#include "hitbox/Hitbox.h"
 #include "SFML/Graphics/Rect.hpp"
 #include "SFML/System/Vector2.hpp"
 #include "SFML/Window/Event.hpp"
@@ -21,7 +22,7 @@ namespace sf {
 
 class Widget {
 public:
-    Widget(EventBus& event_bus, sf::Vector2f position, sf::Vector2f size): position(position), size(size), onClickListener(Listener::make_listener<sf::Event::MouseButtonPressed>([this](const sf::Event::MouseButtonPressed& e) {
+    Widget(EventBus& event_bus, std::unique_ptr<Hitbox> hitbox): hitbox(std::move(hitbox)), onClickListener(Listener::make_listener<sf::Event::MouseButtonPressed>([this](const sf::Event::MouseButtonPressed& e) {
         if (contains(sf::Vector2f(e.position))) {
             onClick();
         }
@@ -60,20 +61,19 @@ public:
 
     virtual void onHoverExit() {}
 
-    virtual bool contains(sf::Vector2f point) {
-        return sf::Rect{position, size}.contains(point);
+    [[nodiscard]] bool contains(sf::Vector2f point) const {
+        return hitbox->contains(point);
     }
 
     void addChild(std::unique_ptr<Widget> child, int z = 0) {
         children_map[z].push_back(std::move(child));
     }
 
+protected:
+    std::unique_ptr<Hitbox> hitbox;
+
 private:
-
     std::map<int, std::vector<std::unique_ptr<Widget>>, std::greater<>> children_map;
-
-    const sf::Vector2f position;
-    const sf::Vector2f size;
 
     Listener onClickListener;
 
@@ -97,7 +97,7 @@ private:
 protected:
 
     [[nodiscard]] sf::Vector2f getAbsolutePosition(sf::Vector2f parentPos) const {
-        return parentPos + position;
+        return parentPos + hitbox->getPosition();
     }
 };
 
