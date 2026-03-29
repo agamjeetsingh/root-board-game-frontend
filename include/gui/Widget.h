@@ -22,24 +22,7 @@ namespace sf {
 
 class Widget {
 public:
-    Widget(EventBus& event_bus, std::unique_ptr<Hitbox> hitbox): hitbox(std::move(hitbox)), onClickListener(Listener::make_listener<sf::Event::MouseButtonPressed>([this](const sf::Event::MouseButtonPressed& e) {
-        if (contains(sf::Vector2f(e.position))) {
-            onClick();
-        }
-    }, event_bus)), onHoverListener(Listener::make_listener<MousePosition>([this](const MousePosition& e) {
-        if (contains(sf::Vector2f(e.position))) {
-            if (!isHovered) {
-                onHoverEnter();
-            }
-            isHovered = true;
-            onHover();
-        } else {
-            if (isHovered) {
-                onHoverExit();
-            }
-            isHovered = false;
-        }
-    }, event_bus)) {}
+    explicit Widget(std::unique_ptr<Hitbox> hitbox): hitbox(std::move(hitbox)) {}
 
     virtual ~Widget() = default;
 
@@ -51,8 +34,8 @@ public:
         recurseChildren(&Widget::update, dt);
     }
 
-    virtual void onClick() {
-        recurseChildren(&Widget::onClick);
+    virtual void onClick(const sf::Event::MouseButtonPressed& e) {
+        recurseChildren(&Widget::onClick, e);
     }
 
     virtual void onHover() {
@@ -76,10 +59,6 @@ protected:
 
 private:
     std::map<int, std::vector<std::unique_ptr<Widget>>, std::greater<>> children_map;
-
-    Listener onClickListener;
-
-    Listener onHoverListener;
 
     bool isHovered = false;
 

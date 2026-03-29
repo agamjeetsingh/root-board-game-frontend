@@ -4,16 +4,14 @@
 
 #ifndef ROOT_BOARD_GAME_FRONTEND_UIMANAGER_H
 #define ROOT_BOARD_GAME_FRONTEND_UIMANAGER_H
-#include <map>
-#include <ranges>
 
 #include "Widget.h"
 
 class UIManager {
 public:
-    explicit UIManager(EventBus& event_bus): clickListener(Listener::make_listener<sf::Event::MouseButtonPressed>([](const sf::Event::MouseButtonPressed& e) {
-
-    }, event_bus)), widget(std::make_unique<Widget>(event_bus, std::make_unique<RectHitbox>(sf::Vector2f{0, 0}, sf::Vector2f{0, 0}))) {}
+    explicit UIManager(EventBus& event_bus): clickListener(Listener::make_listener<sf::Event::MouseButtonPressed>([this](const sf::Event::MouseButtonPressed& e) {
+        widget->onClick(e);
+    }, event_bus)), widget(std::make_unique<Widget>(std::make_unique<RectHitbox>(sf::Vector2f{0, 0}, sf::Vector2f{MAXFLOAT, MAXFLOAT}))) {}
 
     void addChild(std::unique_ptr<Widget> child) const {
         widget->addChild(std::move(child));

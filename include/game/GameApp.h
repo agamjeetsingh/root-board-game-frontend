@@ -23,11 +23,9 @@ template<class... Ts> struct overloaded : Ts... { using Ts::operator()...; };
 class GameApp {
 public:
     GameApp() : ui_manager(event_bus) {
-
         loadFonts();
 
         ui_manager.addChild(std::make_unique<TextBox>(
-            event_bus,
             sf::Vector2f{100, 100},
             sf::Vector2f{100, 100},
             fonts[GameFont::TITLE],

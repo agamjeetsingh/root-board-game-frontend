@@ -5,14 +5,13 @@
 #include "../../include/gui/TextBox.h"
 
 TextBox::TextBox(
-    EventBus &event_bus,
-    const sf::Vector2f position,
+const sf::Vector2f position,
     const sf::Vector2f size,
     const sf::Font &font,
     const std::string &text,
     const unsigned int characterSize,
     const sf::Color color) :
-    Widget(event_bus, std::make_unique<RectHitbox>(position, size)),
+    Widget(std::make_unique<RectHitbox>(position, size)),
     text(font, text, characterSize),
     size(size) {
     this->text.setFillColor(color);

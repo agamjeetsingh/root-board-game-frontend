@@ -5,6 +5,8 @@
 #ifndef ROOT_BOARD_GAME_FRONTEND_TEXTBOX_H
 #define ROOT_BOARD_GAME_FRONTEND_TEXTBOX_H
 
+#include <iostream>
+
 #include "Widget.h"
 #include "hitbox/RectHitbox.h"
 #include "SFML/Graphics/Font.hpp"
@@ -15,7 +17,6 @@
 class TextBox : public Widget {
 public:
     TextBox(
-        EventBus& event_bus,
         sf::Vector2f position,
         sf::Vector2f size,
         const sf::Font& font,
@@ -30,6 +31,10 @@ public:
     void setCharacterSize(unsigned int characterSize);
 
     void setColor(sf::Color color);
+
+    void onClick(const sf::Event::MouseButtonPressed &e) override {
+        std::cout << "clicked!" << std::endl;
+    }
 
     sf::Text text;
 
