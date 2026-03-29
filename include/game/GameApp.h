@@ -5,7 +5,7 @@
 #ifndef ROOT_BOARD_GAME_FRONTEND_GAMEAPP_H
 #define ROOT_BOARD_GAME_FRONTEND_GAMEAPP_H
 
-#include <iostream>
+#include <magic_enum.hpp>
 
 #include "../events/EventBus.h"
 #include "../events/MousePosition.h"
@@ -23,14 +23,14 @@ template<class... Ts> struct overloaded : Ts... { using Ts::operator()...; };
 class GameApp {
 public:
     GameApp() : ui_manager(event_bus) {
-        if (!titleFont.openFromFile(getPath(GameFont::TITLE))) {
-            throw std::runtime_error("Failed to load title font");
-        }
-        if (!textFont.openFromFile(getPath(GameFont::BODY))) {
-            throw std::runtime_error("Failed to load body font");
-        }
 
-        ui_manager.addChild(std::make_unique<TextBox>(event_bus, sf::Vector2f{100, 100}, sf::Vector2f{100, 100}, titleFont, "hey, welcome to root!"));
+        loadFonts();
+
+        ui_manager.addChild(std::make_unique<TextBox>(
+            event_bus, sf::Vector2f{100, 100},
+            sf::Vector2f{100, 100},
+            fonts[GameFont::TITLE],
+            "hey, welcome to root!"));
     }
 
     void run() {
@@ -98,9 +98,23 @@ private:
         }
     }
 
-    sf::Font titleFont;
+    std::unordered_map<GameFont, sf::Font> fonts;
 
-    sf::Font textFont;
+    void loadFonts() {
+        for (GameFont fontType: magic_enum::enum_values<GameFont>()) {
+            sf::Font font;
+
+            if (!font.openFromFile(getPath(fontType))) {
+                throw std::runtime_error(
+                    "Failed to load font type: " +
+                    std::string(magic_enum::enum_name(fontType)) +
+                    " at address: " +
+                    getPath(fontType));
+            }
+
+            fonts[fontType] = font;
+        }
+    }
 };
 
 #endif //ROOT_BOARD_GAME_FRONTEND_GAMEAPP_H

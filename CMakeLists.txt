@@ -13,6 +13,13 @@ FetchContent_Declare(
 FetchContent_MakeAvailable(nlohmann_json)
 
 FetchContent_Declare(
+        magic_enum
+        GIT_REPOSITORY https://github.com/Neargye/magic_enum.git
+        GIT_TAG        v0.9.5   # or latest release
+)
+FetchContent_MakeAvailable(magic_enum)
+
+FetchContent_Declare(
         SFML
         GIT_REPOSITORY https://github.com/SFML/SFML.git
         GIT_TAG master
@@ -41,4 +48,5 @@ target_link_libraries(root_board_game_frontend PRIVATE
         SFML::Window
         SFML::System
         SFML::Audio
+        magic_enum::magic_enum
 )
