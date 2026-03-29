@@ -13,6 +13,8 @@ public:
     [[nodiscard]] virtual bool contains(sf::Vector2f point) const = 0;
 
     [[nodiscard]] virtual const sf::Vector2f& getPosition() const = 0;
+
+    virtual void setPosition(sf::Vector2f newPosition) = 0;
 };
 
 #endif //ROOT_BOARD_GAME_FRONTEND_HITBOX_H

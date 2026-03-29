@@ -19,6 +19,10 @@ public:
         return position;
     }
 
+    void setPosition(sf::Vector2f newPosition) override {
+        position = newPosition;
+    }
+
 private:
     sf::Vector2f position;
 

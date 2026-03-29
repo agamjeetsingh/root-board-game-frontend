@@ -42,6 +42,10 @@ public:
         return *this;
     }
 
+    void update(float dt) override {
+        hitbox->setPosition(hitbox->getPosition() + (dt * sf::Vector2f{100, 100}));
+    }
+
     sf::Text text;
 
     sf::Vector2f size;
