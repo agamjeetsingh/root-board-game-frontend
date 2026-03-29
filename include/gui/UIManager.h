@@ -25,10 +25,6 @@ public:
         widget->draw(target, ORIGIN);
     }
 
-    void newMousePosition(const sf::Vector2i pos) {
-        mousePosition = pos;
-    }
-
     void update(float dt) const {
         widget->update(dt);
     }
@@ -37,8 +33,6 @@ private:
     std::unique_ptr<Widget> widget;
 
     std::optional<Widget*> widgetUnderMouse;
-
-    sf::Vector2i mousePosition;
 
     Listener clickListener;
 
