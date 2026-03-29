@@ -25,7 +25,11 @@ public:
 
     void draw(sf::RenderTarget &target, sf::Vector2f parentPos) override;
 
-    TextBox& setText(const std::string& newText);
+    void setText(const std::string& newText);
+
+    void setCharacterSize(unsigned int characterSize);
+
+    void setColor(sf::Color color);
 
     sf::Text text;
 

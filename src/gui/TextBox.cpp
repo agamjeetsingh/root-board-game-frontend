@@ -23,9 +23,16 @@ void TextBox::draw(sf::RenderTarget &target, sf::Vector2f parentPos)  {
     target.draw(text);
 }
 
-TextBox &TextBox::setText(const std::string &newText) {
+void TextBox::setText(const std::string &newText) {
     text.setString(newText);
-    return *this;
+}
+
+void TextBox::setCharacterSize(unsigned int characterSize) {
+    text.setCharacterSize(characterSize);
+}
+
+void TextBox::setColor(sf::Color color) {
+    text.setFillColor(color);
 }
 
 unsigned int TextBox::DEFAULT_CHAR_SIZE = 64;
