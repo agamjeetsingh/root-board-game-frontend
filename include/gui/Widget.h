@@ -14,8 +14,6 @@
 #include "SFML/Window/Event.hpp"
 #include "../events/MousePosition.h"
 
-struct MousePosition;
-
 namespace sf {
     class RenderTarget;
 }
@@ -35,11 +33,26 @@ public:
     }
 
     virtual void onClick(const sf::Event::MouseButtonPressed& e) {
-        recurseChildren(&Widget::onClick, e);
+        for (auto&& children : children_map | std::views::values) {
+            for (auto& child : children) {
+                if (child->contains(sf::Vector2f(e.position))) {
+                    child->onClick(e);
+                    return;
+                }
+            }
+        }
     }
 
-    virtual void onHover() {
-        recurseChildren(&Widget::onHover);
+    virtual void onHover(const MousePosition& e) {
+        for (auto&& children : children_map | std::views::values) {
+            for (auto& child : children) {
+                if (child->contains(sf::Vector2f(e.position))) {
+                    child->onHover(e);
+                    return;
+                }
+            }
+        }
+        // TODO - Make it so that the child always receive these and maintain the internal flags for onHoverEnter and onHoverExit
     }
 
     virtual void onHoverEnter() {}
