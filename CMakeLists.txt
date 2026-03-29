@@ -29,11 +29,11 @@ add_executable(root_board_game_frontend main.cpp
         include/events/Listener.h
         include/events/ListenerPriority.h
         include/game/GameApp.h
-        src/events/Listener.cpp)
         src/events/Listener.cpp
         include/gui/Widget.h
         include/events/MousePosition.h
         include/gui/UIManager.h
+        include/gui/TextBox.h)
 
 target_link_libraries(root_board_game_frontend PRIVATE
         nlohmann_json::nlohmann_json

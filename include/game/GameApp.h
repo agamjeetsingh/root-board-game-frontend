@@ -8,6 +8,10 @@
 #include <iostream>
 
 #include "../events/EventBus.h"
+#include "../events/MousePosition.h"
+#include "../gui/TextBox.h"
+#include "../gui/UIManager.h"
+#include "../gui/Widget.h"
 #include "../input/InputManager.h"
 #include "SFML/Graphics/Font.hpp"
 #include "SFML/Graphics/RenderWindow.hpp"
@@ -25,6 +29,8 @@ public:
         if (!textFont.openFromFile(getPath(GameFont::BODY))) {
             throw std::runtime_error("Failed to load body font");
         }
+
+        ui_manager.addChild(std::make_unique<TextBox>(event_bus, sf::Vector2f{100, 100}, sf::Vector2f{100, 100}, titleFont, "hey, welcome to root!"));
     }
 
     void run() {
@@ -78,6 +84,8 @@ private:
                 [&](const sf::Event::MouseButtonPressed& e) {
                     input_manager.mouseMovedTo(e.position);
                     input_manager.mouseButtonPressed(e.button);
+
+                    event_bus.emit(e);
                 },
                 [&](const sf::Event::MouseButtonReleased& e) {
                     input_manager.mouseMovedTo(e.position);
@@ -89,6 +97,10 @@ private:
             });
         }
     }
+
+    sf::Font titleFont;
+
+    sf::Font textFont;
 };
 
 #endif //ROOT_BOARD_GAME_FRONTEND_GAMEAPP_H
