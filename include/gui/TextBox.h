@@ -16,39 +16,24 @@ class TextBox : public Widget {
 public:
     TextBox(
         EventBus& event_bus,
-        const sf::Vector2f position,
-        const sf::Vector2f size,
+        sf::Vector2f position,
+        sf::Vector2f size,
         const sf::Font& font,
-        const std::string& text) :
-    Widget(event_bus, std::make_unique<RectHitbox>(position, size)),
-    text(font, text, 64),
-    size(size) {
-        this->text.setFillColor(sf::Color::Black);
-    }
+        const std::string& text,
+        unsigned int characterSize = DEFAULT_CHAR_SIZE,
+        sf::Color color = DEFAULT_TEXT_COLOR);
 
-    void draw(sf::RenderTarget &target, sf::Vector2f parentPos) override {
-        sf::RectangleShape rect{size};
-        sf::Color c = sf::Color::Red;
-        c.a = 40;
-        rect.setFillColor(c);
-        rect.setPosition(getAbsolutePosition(parentPos));
-        target.draw(rect);
-        text.setPosition(getAbsolutePosition(parentPos));
-        target.draw(text);
-    }
+    void draw(sf::RenderTarget &target, sf::Vector2f parentPos) override;
 
-    TextBox& setText(const std::string& newText) {
-        text.setString(newText);
-        return *this;
-    }
-
-    void update(float dt) override {
-        hitbox->setPosition(hitbox->getPosition() + (dt * sf::Vector2f{100, 100}));
-    }
+    TextBox& setText(const std::string& newText);
 
     sf::Text text;
 
     sf::Vector2f size;
+
+    static unsigned int DEFAULT_CHAR_SIZE;
+
+    static sf::Color DEFAULT_TEXT_COLOR;
 };
 
 #endif //ROOT_BOARD_GAME_FRONTEND_TEXTBOX_H

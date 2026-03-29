@@ -10,9 +10,9 @@
 #include <vector>
 #include "../events/Listener.h"
 #include "hitbox/Hitbox.h"
-#include "SFML/Graphics/Rect.hpp"
 #include "SFML/System/Vector2.hpp"
 #include "SFML/Window/Event.hpp"
+#include "../events/MousePosition.h"
 
 struct MousePosition;
 
