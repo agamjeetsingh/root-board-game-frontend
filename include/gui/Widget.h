@@ -47,7 +47,9 @@ public:
         recurseChildren(&Widget::draw, target, getAbsolutePosition(parentPos));
     }
 
-    virtual void update(float dt) {}
+    virtual void update(float dt) {
+        recurseChildren(&Widget::update, dt);
+    }
 
     virtual void onClick() {
         recurseChildren(&Widget::onClick);
