@@ -9,10 +9,10 @@
 
 class UIManager {
 public:
-    explicit UIManager(EventBus& event_bus): clickListener(Listener::make_listener<sf::Event::MouseButtonPressed>([this](const sf::Event::MouseButtonPressed& e) {
+    explicit UIManager(EventBus& event_bus): widget(std::make_unique<Widget>(std::make_unique<RectHitbox>(sf::Vector2f{0, 0}, sf::Vector2f{MAXFLOAT, MAXFLOAT}))),
+    clickListener(Listener::make_listener<sf::Event::MouseButtonPressed>([this](const sf::Event::MouseButtonPressed& e) {
         widget->onClick(e);
     }, event_bus)),
-    widget(std::make_unique<Widget>(std::make_unique<RectHitbox>(sf::Vector2f{0, 0}, sf::Vector2f{MAXFLOAT, MAXFLOAT}))),
     mouseMovementListener(Listener::make_listener<MousePosition>([this](const MousePosition& e) {
         widget->onHover(e);
     }, event_bus)) {}
