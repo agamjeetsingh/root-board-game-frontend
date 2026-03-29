@@ -27,7 +27,8 @@ public:
         loadFonts();
 
         ui_manager.addChild(std::make_unique<TextBox>(
-            event_bus, sf::Vector2f{100, 100},
+            event_bus,
+            sf::Vector2f{100, 100},
             sf::Vector2f{100, 100},
             fonts[GameFont::TITLE],
             "hey, welcome to root!"));
@@ -36,19 +37,19 @@ public:
     void run() {
         while (window.isOpen()) {
             sf::Time deltaTime = clock.restart();
-            float dt = std::min(deltaTime.asSeconds(), 0.033f);
+            float dt = std::min(deltaTime.asSeconds(), 1.0f / MIN_FRAMERATE);
 
             pollEvents();
 
             ui_manager.newMousePosition(input_manager.getMousePosition());
+
+            event_bus.execute();
 
             ui_manager.update(dt);
 
             window.clear(sf::Color::White);
 
             ui_manager.draw(window);
-
-            event_bus.execute();
 
             window.display();
         }
@@ -115,6 +116,8 @@ private:
             fonts[fontType] = font;
         }
     }
+
+    float MIN_FRAMERATE = 30;
 };
 
 #endif //ROOT_BOARD_GAME_FRONTEND_GAMEAPP_H
