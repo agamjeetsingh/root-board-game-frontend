@@ -61,6 +61,8 @@ public:
 
     void mouseButtonReleased(const sf::Mouse::Button button) { pressedMouseButtons.erase(button); }
 
+    [[nodiscard]] sf::Vector2i getMousePosition() const { return mousePosition; }
+
 private:
     // pressedKeys[key].second is true if and only if it has been used
     std::unordered_map<sf::Keyboard::Key, std::pair<sf::Time, bool>> pressedKeys;

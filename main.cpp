@@ -2,6 +2,7 @@
 
 #include "include/constants/GameFont.h"
 #include "include/events/EventBus.h"
+#include "include/game/GameApp.h"
 #include "include/input/InputManager.h"
 #include "SFML/Graphics/Font.hpp"
 #include "SFML/Graphics/RenderWindow.hpp"
@@ -9,6 +10,11 @@
 #include "SFML/Window/VideoMode.hpp"
 
 int main() {
+    GameApp game_app;
+    game_app.run();
+
+    return 0;
+
     sf::RenderWindow window(sf::VideoMode(sf::VideoMode::getDesktopMode().size), "My Game");
     sf::Clock clock;
 

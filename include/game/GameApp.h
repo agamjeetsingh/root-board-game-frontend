@@ -18,6 +18,15 @@ template<class... Ts> struct overloaded : Ts... { using Ts::operator()...; };
 
 class GameApp {
 public:
+    GameApp() : ui_manager(event_bus) {
+        if (!titleFont.openFromFile(getPath(GameFont::TITLE))) {
+            throw std::runtime_error("Failed to load title font");
+        }
+        if (!textFont.openFromFile(getPath(GameFont::BODY))) {
+            throw std::runtime_error("Failed to load body font");
+        }
+    }
+
     void run() {
         while (window.isOpen()) {
             sf::Time deltaTime = clock.restart();
@@ -25,7 +34,13 @@ public:
 
             pollEvents();
 
+            ui_manager.newMousePosition(input_manager.getMousePosition());
+
+            ui_manager.update(dt);
+
             window.clear(sf::Color::White);
+
+            ui_manager.draw(window);
 
             event_bus.execute();
 
@@ -42,6 +57,8 @@ private:
     EventBus event_bus;
 
     InputManager input_manager;
+
+    UIManager ui_manager;
 
     void pollEvents() {
         while (const std::optional<sf::Event> event = window.pollEvent()) {
