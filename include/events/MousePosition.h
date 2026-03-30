@@ -7,7 +7,7 @@
 #include "SFML/System/Vector2.hpp"
 
 struct MousePosition {
-    sf::Vector2i position;
+    sf::Vector2f position;
 };
 
 #endif //ROOT_BOARD_GAME_FRONTEND_MOUSEPOSITION_H

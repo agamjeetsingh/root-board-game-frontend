@@ -93,7 +93,7 @@ private:
                 }
             });
         }
-        event_bus.emit(MousePosition(input_manager.getMousePosition()));
+        event_bus.emit(MousePosition(sf::Vector2f(input_manager.getMousePosition())));
     }
 
     std::unordered_map<GameFont, sf::Font> fonts;

@@ -34,7 +34,7 @@ public:
 
     virtual void onClick(const sf::Event::MouseButtonPressed& e) {
         for (auto&& children : children_map | std::views::values) {
-            for (auto& child : children) {
+            for (const auto& child : children) {
                 if (child->contains(sf::Vector2f(e.position))) {
                     child->onClick(e);
                     return;
@@ -43,21 +43,38 @@ public:
         }
     }
 
-    virtual void onHover(const MousePosition& e) {
+    bool mousePositionUpdate(const MousePosition& e) {
+        bool blockedByChild = false;
+
         for (auto&& children : children_map | std::views::values) {
-            for (auto& child : children) {
-                if (child->contains(sf::Vector2f(e.position))) {
-                    child->onHover(e);
-                    return;
+            for (const auto& child : children) {
+                if (child->mousePositionUpdate(e)) {
+                    blockedByChild = true;
                 }
             }
         }
-        // TODO - Make it so that the child always receive these and maintain the internal flags for onHoverEnter and onHoverExit
+
+        if (!blockedByChild && contains(e.position)) {
+            if (!isHovered) {
+                isHovered = true;
+                onHoverEnter(e);
+            }
+            onHover(e);
+            return true;
+        }
+
+        if (isHovered) {
+            isHovered = false;
+            onHoverExit(e);
+        }
+        return false;
     }
 
-    virtual void onHoverEnter() {}
+    virtual void onHover(const MousePosition& e) {}
 
-    virtual void onHoverExit() {}
+    virtual void onHoverEnter(const MousePosition& e) {}
+
+    virtual void onHoverExit(const MousePosition& e) {}
 
     [[nodiscard]] bool contains(sf::Vector2f point) const {
         return hitbox->contains(point);
