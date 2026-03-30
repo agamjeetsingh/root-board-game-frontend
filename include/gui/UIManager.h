@@ -29,6 +29,10 @@ public:
         widget->update(dt);
     }
 
+    void mousePositionUpdate(const MousePosition& e) const {
+        widget->mousePositionUpdate(e);
+    }
+
 private:
     std::unique_ptr<Widget> widget;
 

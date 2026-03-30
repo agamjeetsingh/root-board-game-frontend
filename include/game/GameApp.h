@@ -39,6 +39,8 @@ public:
 
             pollEvents();
 
+            ui_manager.mousePositionUpdate(MousePosition(sf::Vector2f(input_manager.getMousePosition())));
+
             event_bus.execute();
 
             ui_manager.update(dt);
@@ -93,7 +95,6 @@ private:
                 }
             });
         }
-        event_bus.emit(MousePosition(sf::Vector2f(input_manager.getMousePosition())));
     }
 
     std::unordered_map<GameFont, sf::Font> fonts;
