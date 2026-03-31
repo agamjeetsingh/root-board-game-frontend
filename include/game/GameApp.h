@@ -9,6 +9,7 @@
 
 #include "../events/EventBus.h"
 #include "../events/MousePosition.h"
+#include "../events/callbacks/Scheduler.h"
 #include "../gui/TextBox.h"
 #include "../gui/UIManager.h"
 #include "../gui/Widget.h"
@@ -45,6 +46,8 @@ public:
 
             ui_manager.update(dt);
 
+            scheduler.update(dt);
+
             window.clear(sf::Color::White);
 
             ui_manager.draw(window);
@@ -64,6 +67,8 @@ private:
     InputManager input_manager;
 
     UIManager ui_manager;
+
+    Scheduler scheduler;
 
     void pollEvents() {
         while (const std::optional<sf::Event> event = window.pollEvent()) {
