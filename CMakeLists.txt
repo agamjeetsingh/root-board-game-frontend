@@ -45,7 +45,8 @@ add_executable(root_board_game_frontend main.cpp
         include/gui/hitbox/RectHitbox.h
         src/gui/TextBox.cpp
         include/gui/assets/TexturesHolder.h
-        include/events/callbacks/ScheduledCallback.h)
+        include/events/callbacks/ScheduledCallback.h
+        include/events/callbacks/Scheduler.h)
 
 target_link_libraries(root_board_game_frontend PRIVATE
         nlohmann_json::nlohmann_json
